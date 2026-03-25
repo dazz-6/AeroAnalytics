@@ -1,0 +1,47 @@
+# =============================================================================
+# AeroShield — .gitignore
+# =============================================================================
+
+# ── SECRET: Never commit these ────────────────────────────────────────────────
+.env                          # database password + personal paths live here
+
+# ── Data files (too large for GitHub; download from BTS separately) ───────────
+data/
+*.csv
+outputs/flights_cleaned.csv   # can be 500MB+
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+venv/
+.venv/
+env/
+ENV/
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── OS files ─────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Outputs (keep summary CSVs but not the huge cleaned dataset) ──────────────
+outputs/flights_cleaned.csv
+
+# ── Power BI temp files ───────────────────────────────────────────────────────
+*.pbix.lock
