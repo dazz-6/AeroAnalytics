@@ -5,10 +5,6 @@
 -- =============================================================================
 -- Workflow:
 --   Python exports CSVs → Load into DB → Run queries → Connect to Power BI
--- =============================================================================
-
-
--- =============================================================================
 -- PART A — TABLE SCHEMAS
 -- (Create these, then bulk-load from Python-exported CSVs)
 -- =============================================================================
@@ -164,7 +160,7 @@ LIMIT 10;
 -- ── V3: Airline-Wise Disruption Rate ─────────────────────────────────────────
 CREATE OR REPLACE VIEW vw_airline_disruption AS
 SELECT
-    op_unique_carrier,
+    carrier,
     total_flights,
     disrupted_flights,
     ROUND((disruption_rate * 100)::numeric, 1)    AS disruption_pct,
@@ -219,16 +215,17 @@ LIMIT 15;
 
 
 -- ── V7: Top Airports by Average Arrival Delay ────────────────────────────────
-CREATE OR REPLACE VIEW vw_top_cancel_airports AS
+CREATE OR REPLACE VIEW vw_top_arr_delay_airports AS
 SELECT
     origin AS airport,
     total_flights,
-    ROUND((cancellation_rate * 100)::numeric, 2) AS cancel_pct,
+    ROUND(avg_arr_delay::numeric, 1)             AS avg_arr_delay_min,
+    ROUND(avg_dep_delay::numeric, 1)             AS avg_dep_delay_min,
     ROUND((disruption_rate * 100)::numeric, 1)   AS disruption_pct,
-    ROUND(afi::numeric, 4)                      AS fragility_index
+    ROUND(afi::numeric, 4)                       AS fragility_index
 FROM airport_summary
 WHERE total_flights >= 100
-ORDER BY cancel_pct DESC
+ORDER BY avg_arr_delay_min DESC
 LIMIT 15;
 
 
@@ -349,3 +346,8 @@ LIMIT 20;
 SELECT table_name
 FROM information_schema.tables
 WHERE table_schema = 'public';
+
+
+TRUNCATE TABLE carrier_summary CASCADE;
+TRUNCATE TABLE monthly_summary CASCADE;
+TRUNCATE TABLE delay_cause_summary CASCADE;
